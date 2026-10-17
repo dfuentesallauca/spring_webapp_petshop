@@ -1,0 +1,54 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layouts/layout :: layoutBase(~{::contenido})">
+
+<div th:fragment="contenido">
+	<div class="d-flex justify-content-between align-items-center mb-4">
+		<h2 class="fw-bold mb-0">Gestión de Categorías</h2>
+		<a th:href="@{/categoria/nuevo}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Nueva categoría</a>
+	</div>
+
+	<div class="card shadow-sm">
+		<div class="card-body p-0">
+			<table class="table table-hover table-bordered mb-0">
+				<thead class="table-light">
+					<tr>
+						<th>#</th>
+						<th>Nombre</th>
+						<th>Estado</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item:${lstCategorias}">
+						<td th:text="${item.idCategoria}"></td>
+						<td th:text="${item.nombre}"></td>
+						<td>
+							<span class="badge" th:classappend="${item.activo} ? 'bg-success' : 'bg-secondary'"
+								th:text="${item.activo} ? 'Activo' : 'Inactivo'"></span>
+						</td>
+						<td class="d-flex gap-1">
+							<a th:href="@{/categoria/edicion/{id}(id=${item.idCategoria})}" class="btn btn-sm btn-outline-primary">
+								<i class="bi bi-pencil"></i> Editar
+							</a>
+							<form method="post" th:action="@{/categoria/cambiar-activo}">
+								<input type="hidden" name="id" th:value="${item.idCategoria}">
+								<button th:if="${item.activo}" type="submit" class="btn btn-sm btn-outline-danger"
+									onclick="return confirm('¿Desactivar esta categoria?')">
+									<i class="bi bi-slash-circle"></i> Desactivar
+								</button>
+								<button th:unless="${item.activo}" type="submit" class="btn btn-sm btn-outline-success"
+									onclick="return confirm('¿Activar esta categoria?')">
+									<i class="bi bi-check-circle"></i> Activar
+								</button>
+							</form>
+						</td>
+					</tr>
+					<tr th:if="${#lists.isEmpty(lstCategorias)}">
+						<td colspan="4" class="text-center text-muted py-4">No hay categorías registradas.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+</html>
