@@ -1,0 +1,101 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layouts/layout :: layoutBase(~{::contenido})">
+
+<div th:fragment="contenido">
+	<th:block th:if="${session.rol == 'ADMIN'}">
+		<h2 class="fw-bold mb-1">Panel de Administración</h2>
+		<p class="text-muted mb-4">Bienvenido, <span th:text="${session.fullName}"></span></p>
+
+		<div class="row g-4">
+			<div class="col-md-4">
+				<div class="card shadow-sm h-100">
+					<div class="card-body text-center py-4">
+						<i class="bi bi-tags fs-1" style="color:#2C7A7B;"></i>
+						<h5 class="card-title mt-2">Categorías</h5>
+						<p class="card-text text-muted small">Gestionar categorías de productos.</p>
+						<a th:href="@{/categoria/listado}" class="btn btn-primary">Ir al módulo</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card shadow-sm h-100">
+					<div class="card-body text-center py-4">
+						<i class="bi bi-box-seam fs-1" style="color:#2C7A7B;"></i>
+						<h5 class="card-title mt-2">Productos</h5>
+						<p class="card-text text-muted small">Gestionar catálogo y stock.</p>
+						<a th:href="@{/producto/listado}" class="btn btn-primary">Ir al módulo</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card shadow-sm h-100">
+					<div class="card-body text-center py-4">
+						<i class="bi bi-people fs-1" style="color:#2C7A7B;"></i>
+						<h5 class="card-title mt-2">Usuarios</h5>
+						<p class="card-text text-muted small">Gestionar usuarios y roles.</p>
+						<a th:href="@{/usuario/listado}" class="btn btn-primary">Ir al módulo</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card shadow-sm h-100">
+					<div class="card-body text-center py-4">
+						<i class="bi bi-calendar-range fs-1" style="color:#2C7A7B;"></i>
+						<h5 class="card-title mt-2">Ventas por fecha</h5>
+						<p class="card-text text-muted small">Reporte de pedidos por rango de fechas.</p>
+						<a th:href="@{/reporte/ventas}" class="btn btn-primary">Ver reporte</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card shadow-sm h-100">
+					<div class="card-body text-center py-4">
+						<i class="bi bi-bar-chart-line fs-1" style="color:#2C7A7B;"></i>
+						<h5 class="card-title mt-2">Productos más vendidos</h5>
+						<p class="card-text text-muted small">Ranking de productos por unidades vendidas.</p>
+						<a th:href="@{/reporte/top-productos}" class="btn btn-primary">Ver reporte</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:unless="${session.rol == 'ADMIN'}">
+		<h2 class="fw-bold mb-1">Bienvenido a Patitas Felices</h2>
+		<p class="text-muted mb-4">Hola, <span th:text="${session.fullName}"></span></p>
+
+		<div class="row g-4">
+			<div class="col-md-4">
+				<div class="card shadow-sm h-100">
+					<div class="card-body text-center py-4">
+						<i class="bi bi-box-seam fs-1" style="color:#2C7A7B;"></i>
+						<h5 class="card-title mt-2">Productos</h5>
+						<p class="card-text text-muted small">Explora el catálogo de productos.</p>
+						<a th:href="@{/tienda/productos}" class="btn btn-primary">Ver productos</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card shadow-sm h-100">
+					<div class="card-body text-center py-4">
+						<i class="bi bi-cart3 fs-1" style="color:#2C7A7B;"></i>
+						<h5 class="card-title mt-2">Carrito</h5>
+						<p class="card-text text-muted small">Revisa y confirma tu compra.</p>
+						<a th:href="@{/tienda/carrito}" class="btn btn-primary">Ir al carrito</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card shadow-sm h-100">
+					<div class="card-body text-center py-4">
+						<i class="bi bi-receipt fs-1" style="color:#2C7A7B;"></i>
+						<h5 class="card-title mt-2">Mis pedidos</h5>
+						<p class="card-text text-muted small">Consulta el historial de tus pedidos.</p>
+						<a th:href="@{/tienda/pedidos}" class="btn btn-primary">Ver pedidos</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</th:block>
+</div>
+
+</html>

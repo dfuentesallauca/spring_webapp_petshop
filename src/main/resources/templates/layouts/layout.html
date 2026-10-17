@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="layoutBase(contenido)">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>PetShop</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<style>
+		:root { --bs-primary: #2C7A7B; --bs-primary-rgb: 44,122,123; }
+		body { font-family: 'Inter', system-ui, sans-serif; display: flex; flex-direction: column; min-height: 100vh; }
+		main { flex: 1; }
+		.btn-primary { background-color: #2C7A7B; border-color: #2C7A7B; }
+		.btn-primary:hover { background-color: #1F5F60; border-color: #1F5F60; }
+		.btn-check:checked + .btn-primary,
+		.btn-primary:active { background-color: #1F5F60; border-color: #1F5F60; }
+	</style>
+</head>
+
+<body class="bg-light">
+	<nav class="navbar navbar-expand-md navbar-dark mb-4" style="background-color:#2C7A7B;"
+		th:with="totalItems=${session.carrito != null ? #aggregates.sum(session.carrito.![cantidad]) : 0}">
+		<div class="container">
+			<a class="navbar-brand fw-bold" th:href="@{/}">🐾 Patitas Felices</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navMain">
+				<ul class="navbar-nav ms-auto align-items-center gap-1">
+					<th:block th:if="${session.rol == 'ADMIN'}">
+						<li class="nav-item"><a class="nav-link" th:href="@{/home/dashboard}">Panel</a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/categoria/listado}">Categorías</a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/producto/listado}">Productos</a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/usuario/listado}">Usuarios</a></li>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Reportes</a>
+							<ul class="dropdown-menu dropdown-menu-end">
+								<li><a class="dropdown-item" th:href="@{/reporte/ventas}">Ventas por fecha</a></li>
+								<li><a class="dropdown-item" th:href="@{/reporte/top-productos}">Productos más vendidos</a></li>
+							</ul>
+						</li>
+					</th:block>
+					<th:block th:unless="${session.rol == 'ADMIN'}">
+						<li class="nav-item"><a class="nav-link" th:href="@{/tienda/productos}">Productos</a></li>
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{/tienda/carrito}"><i class="bi bi-cart3 me-1"></i>Carrito
+								<span th:if="${totalItems > 0}" class="badge rounded-pill" style="background-color:#F4A261; color:#212529;"
+									th:text="${totalItems}"></span></a>
+						</li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/tienda/pedidos}">Mis pedidos</a></li>
+					</th:block>
+					<li class="nav-item ms-2">
+						<a class="nav-link" th:href="@{/cerrar-sesion}">
+							<i class="bi bi-box-arrow-right me-1"></i><span th:text="${session.fullName}"></span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<main class="container py-4">
+		<div th:replace="${contenido}">[Contenido aquí]</div>
+	</main>
+
+	<footer class="bg-dark text-white text-center py-3 mt-5">
+		<small>&copy; 2025 Patitas Felices. Todos los derechos reservados.</small>
+	</footer>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<th:block th:utext="${alert}"></th:block>
+</body>
+</html>
