@@ -1,0 +1,63 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layouts/layout :: layoutBase(~{::contenido})">
+
+<div th:fragment="contenido">
+	<h2 class="fw-bold mb-4">Catálogo de Productos</h2>
+
+	<form th:action="@{/tienda/productos}" method="get" th:object="${filter}" class="row g-2 mb-4">
+		<div class="col-auto">
+			<select class="form-select" th:field="*{idCategoria}">
+				<option value="">Todas las categorías</option>
+				<option th:each="item: ${lstCategorias}" th:value="${item.idCategoria}" th:text="${item.nombre}"></option>
+			</select>
+		</div>
+		<div class="col-auto">
+			<button type="submit" class="btn btn-primary">Filtrar</button>
+		</div>
+		<div class="col-auto" th:if="${filter.idCategoria != null}">
+			<a th:href="@{/tienda/productos}" class="btn btn-outline-secondary">Ver todos</a>
+		</div>
+	</form>
+
+	<div class="card shadow-sm">
+		<div class="card-body p-0">
+			<table class="table table-hover table-bordered mb-0">
+				<thead class="table-light">
+					<tr>
+						<th>Producto</th>
+						<th>Categoría</th>
+						<th>Precio</th>
+						<th>Stock disponible</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item:${lstProductos}">
+						<td th:text="${item.nombre}" class="fw-semibold"></td>
+						<td th:text="${item.categoria.nombre}"></td>
+						<td th:text="${#numbers.formatCurrency(item.precio)}"></td>
+						<td>
+							<span th:if="${item.stock > 0}" class="badge bg-success" th:text="|${item.stock} disponibles|"></span>
+							<span th:unless="${item.stock > 0}" class="badge bg-secondary">Sin stock</span>
+						</td>
+						<td>
+							<form method="post" th:action="@{/tienda/carrito/agregar}" class="d-flex gap-1 align-items-center">
+								<input type="hidden" name="idProducto" th:value="${item.idProducto}">
+								<input type="hidden" name="idCategoria" th:value="${filter.idCategoria}">
+								<input type="number" name="cantidad" value="1" min="1" th:max="${item.stock}"
+									class="form-control form-control-sm" style="width:65px;" th:disabled="${item.stock == 0}">
+								<button type="submit" class="btn btn-sm btn-primary" th:disabled="${item.stock == 0}">
+									<i class="bi bi-cart-plus"></i>
+								</button>
+							</form>
+						</td>
+					</tr>
+					<tr th:if="${#lists.isEmpty(lstProductos)}">
+						<td colspan="5" class="text-center text-muted py-4">No hay productos disponibles.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+</html>

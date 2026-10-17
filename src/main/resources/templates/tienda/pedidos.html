@@ -1,0 +1,67 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layouts/layout :: layoutBase(~{::contenido})">
+
+<div th:fragment="contenido">
+	<h2 class="fw-bold mb-4">Mis Pedidos</h2>
+
+	<div class="card shadow-sm">
+		<div class="card-body p-0">
+			<table class="table table-hover table-bordered mb-0">
+				<thead class="table-light">
+					<tr>
+						<th>#Pedido</th>
+						<th>Fecha</th>
+						<th>Estado</th>
+						<th class="text-end">Total</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<th:block th:each="p:${lstPedidos}">
+						<tr>
+							<td th:text="|#${p.idPedido}|"></td>
+							<td th:text="${#temporals.format(p.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+							<td>
+								<span class="badge" th:classappend="${p.estado == 'COMPLETADO'} ? 'bg-success' : 'bg-warning text-dark'"
+									th:text="${p.estado}"></span>
+							</td>
+							<td th:text="${#numbers.formatCurrency(p.total)}" class="text-end"></td>
+							<td class="text-center">
+								<button class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse"
+									th:attr="data-bs-target='#detalle-' + ${p.idPedido}" aria-expanded="false">
+									<i class="bi bi-chevron-down"></i>
+								</button>
+							</td>
+						</tr>
+						<tr class="collapse" th:id="|detalle-${p.idPedido}|">
+							<td colspan="5" class="p-0 border-0">
+								<table class="table table-sm mb-0 bg-white">
+									<thead class="table-secondary">
+										<tr>
+											<th class="ps-4">Producto</th>
+											<th class="text-center">Cantidad</th>
+											<th class="text-end">Precio unit.</th>
+											<th class="text-end pe-4">Subtotal</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="d:${p.detalles}">
+											<td class="ps-4" th:text="${d.producto.nombre}"></td>
+											<td class="text-center" th:text="${d.cantidad}"></td>
+											<td class="text-end" th:text="${#numbers.formatCurrency(d.precioUnitario)}"></td>
+											<td class="text-end pe-4" th:text="${#numbers.formatCurrency(d.subtotal)}"></td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</th:block>
+					<tr th:if="${#lists.isEmpty(lstPedidos)}">
+						<td colspan="5" class="text-center text-muted py-4">No tienes pedidos registrados.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+</html>

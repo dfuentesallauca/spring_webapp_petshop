@@ -1,0 +1,62 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layouts/layout :: layoutBase(~{::contenido})">
+
+<div th:fragment="contenido">
+	<h2 class="fw-bold mb-4">Carrito de compras</h2>
+
+	<div th:if="${#lists.isEmpty(carrito)}" class="card shadow-sm">
+		<div class="card-body text-center py-5 text-muted">
+			Tu carrito está vacío.
+			<div class="mt-3">
+				<a th:href="@{/tienda/productos}" class="btn btn-primary">Ver productos</a>
+			</div>
+		</div>
+	</div>
+
+	<th:block th:unless="${#lists.isEmpty(carrito)}">
+		<div class="card shadow-sm mb-4">
+			<div class="card-body p-0">
+				<table class="table table-hover table-bordered mb-0">
+					<thead class="table-light">
+						<tr>
+							<th>Producto</th>
+							<th class="text-end">Precio unit.</th>
+							<th class="text-center">Cantidad</th>
+							<th class="text-end">Subtotal</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="item:${carrito}">
+							<td th:text="${item.nombre}" class="fw-semibold"></td>
+							<td th:text="${#numbers.formatCurrency(item.precio)}" class="text-end"></td>
+							<td th:text="${item.cantidad}" class="text-center"></td>
+							<td th:text="${#numbers.formatCurrency(item.subtotal)}" class="text-end"></td>
+							<td class="text-center">
+								<form method="post" th:action="@{/tienda/carrito/eliminar}">
+									<input type="hidden" name="idProducto" th:value="${item.idProducto}">
+									<button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+								</form>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr class="table-light fw-bold">
+							<td colspan="3" class="text-end">Total</td>
+							<td th:text="${#numbers.formatCurrency(total)}" class="text-end"></td>
+							<td></td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+
+		<div class="d-flex gap-2 justify-content-end">
+			<a th:href="@{/tienda/productos}" class="btn btn-outline-secondary">Seguir comprando</a>
+			<form method="post" th:action="@{/tienda/carrito/confirmar}">
+				<button type="submit" class="btn btn-primary">Confirmar pedido</button>
+			</form>
+		</div>
+	</th:block>
+</div>
+
+</html>
