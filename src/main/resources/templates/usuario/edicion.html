@@ -1,0 +1,39 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layouts/layout :: layoutBase(~{::contenido})">
+
+<div th:fragment="contenido">
+	<h2 class="fw-bold mb-4">Gestión de Usuarios</h2>
+
+	<div class="row g-4">
+		<div class="col-md-6">
+			<div class="card shadow-sm">
+				<div class="card-body p-4">
+					<h5 class="card-title mb-3">Editar usuario</h5>
+					<form th:action="@{/usuario/guardar}" method="post" th:object="${usuario}">
+						<input type="hidden" th:field="*{idUsuario}" />
+						<div class="mb-3">
+							<label for="nombre" class="form-label">Nombre</label>
+							<input type="text" class="form-control" th:field="*{nombre}" required>
+						</div>
+						<div class="mb-3">
+							<label for="email" class="form-label">Correo electrónico</label>
+							<input type="email" class="form-control" th:field="*{email}" required>
+						</div>
+						<div class="mb-3">
+							<label for="rol" class="form-label">Rol</label>
+							<select class="form-select" th:field="*{rol}" required>
+								<option value="CLIENTE">Cliente</option>
+								<option value="ADMIN">Administrador</option>
+							</select>
+						</div>
+						<div class="d-flex gap-2">
+							<button type="submit" class="btn btn-warning">Actualizar</button>
+							<a th:href="@{/usuario/listado}" class="btn btn-outline-secondary">Cancelar</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</html>
