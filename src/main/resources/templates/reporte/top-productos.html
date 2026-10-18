@@ -1,0 +1,43 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layouts/layout :: layoutBase(~{::contenido})">
+
+<div th:fragment="contenido">
+	<h2 class="fw-bold mb-4">Reporte: Productos más vendidos</h2>
+
+	<div class="card shadow-sm">
+		<div class="card-body p-0">
+			<table class="table table-hover table-bordered mb-0">
+				<thead class="table-light">
+					<tr>
+						<th>#</th>
+						<th>Producto</th>
+						<th>Categoría</th>
+						<th class="text-end">Precio</th>
+						<th class="text-center">Unidades vendidas</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item, stat:${lstTop}">
+						<td th:text="${stat.count}" class="text-muted"></td>
+						<td th:text="${item.nombre}" class="fw-semibold"></td>
+						<td th:text="${item.categoria}"></td>
+						<td th:text="${#numbers.formatCurrency(item.precio)}" class="text-end"></td>
+						<td class="text-center">
+							<span class="badge rounded-pill" style="background-color:#F4A261;color:#212529;" th:text="${item.totalVendido}"></span>
+						</td>
+					</tr>
+					<tr th:if="${#lists.isEmpty(lstTop)}">
+						<td colspan="5" class="text-center text-muted py-4">No hay datos de ventas aún.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="mt-3">
+		<a th:href="@{/home/dashboard}" class="btn btn-outline-secondary">
+			<i class="bi bi-arrow-left me-1"></i>Volver al panel
+		</a>
+	</div>
+</div>
+
+</html>
